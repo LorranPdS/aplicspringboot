@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+xmlns:th="http://www.thymeleaf.org">
+
+<head>
+<meta charset="UTF-8">
+<title>Cadastro de Pessoas</title>
+
+<!-- Compiled and minified CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+
+    <!-- Compiled and minified JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+            
+</head>
+
+<body>
+	<h1>Cadastro de usuário</h1>
+	
+	<form action="salvarpessoa" method="post" th:object="${pessoaobj}">
+		
+		<label>Id:</label>
+		<input name="id" th:field="*{id}" readonly="readonly" />
+		<br/>
+			
+		<label>Nome:</label>
+		<input name="nome" th:field="*{nome}" autofocus="autofocus" />
+		<br/>
+		
+		<label>Sobrenome:</label>
+		<input name="sobrenome" th:field="*{sobrenome}" />
+		<br/>
+		
+		<label>Idade:</label>
+		<input name="idade" th:field="*{idade}" />
+		<br/>
+		
+		<input class="waves-effect waves-light btn" type="submit" value="Salvar" />
+	
+	</form>
+	<br/>
+	<br/>
+	
+		<a href="/listarpessoas">Lista de pessoas</a>
+		
+	<br/>
+	<br/>
+	
+	<form action="pesquisarpessoa" method="post">
+		<label>Pesquisa por nome</label>
+		<input name="nomepesquisa">
+		<input class="waves-effect waves-light btn" type="submit" value="Buscar" />
+	</form>
+	
+	<form>		
+		<table>
+		<tr th:each = "pessoa : ${pessoas}">
+		
+		<td th:text="${pessoa.id}" />
+		<td th:text="${pessoa.nome}" />
+		<td th:text="${pessoa.sobrenome}" />
+		<td><a th:href="@{/editarpessoa/{idpessoa}(idpessoa=${pessoa.id})}">Editar</a></td>
+		<td><a th:href="@{/removerpessoa/{idpessoa}(idpessoa=${pessoa.id})}">Excluir</a></td>
+		</tr>
+		
+		</table>
+	
+	
+	</form>
+	
+
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
