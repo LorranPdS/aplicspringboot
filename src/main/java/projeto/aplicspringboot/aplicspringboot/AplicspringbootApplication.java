@@ -9,8 +9,8 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 @SpringBootApplication
 @EntityScan(basePackages = "projeto.aplicspringboot.model")
-@ComponentScan(basePackages = { "projeto.*" })
-@EnableJpaRepositories(basePackages = { "projeto.aplicspringboot.repository" })
+@ComponentScan(basePackages = "projeto.*")
+@EnableJpaRepositories(basePackages = "projeto.aplicspringboot.repository")
 @EnableTransactionManagement
 public class AplicspringbootApplication {
 
