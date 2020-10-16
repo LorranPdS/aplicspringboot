@@ -1,17 +1,18 @@
 package projeto.aplicspringboot.model;
 
 import java.io.Serializable;
-import java.util.List;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import javax.persistence.ManyToOne;
 
+import org.hibernate.annotations.ForeignKey;
+
+@SuppressWarnings("deprecation")
 @Entity
-public class Pessoa implements Serializable {
+public class Telefone implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
@@ -19,12 +20,12 @@ public class Pessoa implements Serializable {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
 
-	private String nome;
-	private String sobrenome;
-	private Integer idade;
-	
-	@OneToMany(mappedBy = "pessoa", orphanRemoval = true, cascade = CascadeType.ALL)
-	private List<Telefone> telefones;
+	private String numero;
+	private String tipo;
+
+	@ForeignKey(name = "pessoa_id")
+	@ManyToOne
+	private Pessoa pessoa;
 
 	public Long getId() {
 		return id;
@@ -34,28 +35,28 @@ public class Pessoa implements Serializable {
 		this.id = id;
 	}
 
-	public String getNome() {
-		return nome;
+	public String getNumero() {
+		return numero;
 	}
 
-	public void setNome(String nome) {
-		this.nome = nome;
+	public void setNumero(String numero) {
+		this.numero = numero;
 	}
 
-	public String getSobrenome() {
-		return sobrenome;
+	public String getTipo() {
+		return tipo;
 	}
 
-	public void setSobrenome(String sobrenome) {
-		this.sobrenome = sobrenome;
+	public void setTipo(String tipo) {
+		this.tipo = tipo;
 	}
 
-	public Integer getIdade() {
-		return idade;
+	public Pessoa getPessoa() {
+		return pessoa;
 	}
 
-	public void setIdade(Integer idade) {
-		this.idade = idade;
+	public void setPessoa(Pessoa pessoa) {
+		this.pessoa = pessoa;
 	}
 
 	@Override
@@ -74,7 +75,7 @@ public class Pessoa implements Serializable {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Pessoa other = (Pessoa) obj;
+		Telefone other = (Telefone) obj;
 		if (id == null) {
 			if (other.id != null)
 				return false;

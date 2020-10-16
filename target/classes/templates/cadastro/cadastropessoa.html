@@ -10,12 +10,12 @@
 	src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
 <title>Página de Cadastro</title>
 <style type="text/css">
-table.striped > tbody > tr:nth-child(2n+1) {
-    background-color: #D3D3D3;
+table.striped>tbody>tr:nth-child(2n+1) {
+	background-color: #D3D3D3;
 }
 
 input[type="submit"] {
-    color: white;
+	color: white;
 }
 </style>
 </head>
@@ -72,13 +72,12 @@ input[type="submit"] {
 
 			<div class="row">
 				<div class="input-field col s12">
-					<label for="pesquisaPorNome" class="active">Pesquisa por
-						nome</label> 
-						<input name="nomepesquisa" class="validate" />
-						<input
+					<label for="pesquisaPorNome" class="active"> Pesquisa por
+						nome</label> <input name="nomepesquisa" class="validate" /> <input
 						value="Buscar" type="submit" class="waves-effect waves-light btn" />
-						
-						<a href="/listarpessoas" class="waves-effect waves-light btn">Lista de pessoas</a>
+
+					<a href="/listarpessoas" class="waves-effect waves-light btn">
+						Lista de pessoas</a>
 				</div>
 			</div>
 		</form>
@@ -86,28 +85,31 @@ input[type="submit"] {
 	<br />
 	<br />
 
-		<table class="striped">
+	<table class="striped">
 		<thead>
-		<tr>
-		<th>Id</th>
-		<th>Nome</th>
-		<th>Sobrenome</th>
-		<th>Editar</th>
-		<th>Excluir</th>
-		</tr>
-		</thead>
-		
-			<tr th:each="pessoa : ${pessoas}">
-			
-				<td th:text="${pessoa.id}" />
-				<td th:text="${pessoa.nome}" />
-				<td th:text="${pessoa.sobrenome}" />
-				<td><a
-					th:href="@{/editarpessoa/{idpessoa}(idpessoa=${pessoa.id})}">Editar</a></td>
-				<td><a
-					th:href="@{/removerpessoa/{idpessoa}(idpessoa=${pessoa.id})}">Excluir</a></td>
+			<tr>
+				<th>Id</th>
+				<th>Nome</th>
+				<th>Sobrenome</th>
+				<th>Editar</th>
+				<th>Excluir</th>
 			</tr>
-		</table>
+		</thead>
+
+		<tr th:each="pessoa : ${pessoas}">
+
+			<td th:text="${pessoa.id}" />
+
+			<td><a th:href="@{/telefones/{idpessoa}(idpessoa=${pessoa.id})}">
+			<span th:text="${pessoa.nome}"></span></a></td>
+
+			<td th:text="${pessoa.sobrenome}" />
+			<td><a
+				th:href="@{/editarpessoa/{idpessoa}(idpessoa=${pessoa.id})}">Editar</a></td>
+			<td><a
+				th:href="@{/removerpessoa/{idpessoa}(idpessoa=${pessoa.id})}">Excluir</a></td>
+		</tr>
+	</table>
 
 </body>
 </html>
