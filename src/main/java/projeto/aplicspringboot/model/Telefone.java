@@ -7,6 +7,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.validation.constraints.NotEmpty;
 
 import org.hibernate.annotations.ForeignKey;
 
@@ -19,8 +20,11 @@ public class Telefone implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
-
+	
+	@NotEmpty(message = "Preencha o campo 'número'")
 	private String numero;
+	
+	@NotEmpty(message = "Preencha o campo 'tipo'")
 	private String tipo;
 
 	@ForeignKey(name = "pessoa_id")

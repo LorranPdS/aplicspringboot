@@ -67,6 +67,10 @@
 			<version>42.2.14</version><!--$NO-MVN-MAN-VER$-->
 		</dependency>
 
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-validation</artifactId>
+		</dependency>
 	</dependencies>
 
 	<build>

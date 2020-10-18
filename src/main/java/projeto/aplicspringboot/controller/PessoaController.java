@@ -1,9 +1,15 @@
 package projeto.aplicspringboot.controller;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
+
+import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -37,13 +43,30 @@ public class PessoaController {
 	}
 
 	@RequestMapping(method = RequestMethod.POST, value = "**/salvarpessoa")
-	public ModelAndView salvar(Pessoa pessoa) {
+	public ModelAndView salvar(@Valid Pessoa pessoa, BindingResult bindingResult) {
+		ModelAndView modelAndView = new ModelAndView("cadastro/cadastropessoa");
+
+		if (bindingResult.hasErrors()) {
+			Iterable<Pessoa> pessoaIt = pessoaRepository.findAll();
+			modelAndView.addObject("pessoaobj", pessoa);
+			modelAndView.addObject("pessoas", pessoaIt);
+
+			List<String> msg = new ArrayList<String>();
+
+			for (ObjectError objectError : bindingResult.getAllErrors()) {
+				msg.add(objectError.getDefaultMessage());
+			}
+
+			modelAndView.addObject("msg", msg);
+			return modelAndView;
+		}
+
 		pessoaRepository.save(pessoa);
 
-		ModelAndView modelAndView = new ModelAndView("cadastro/cadastropessoa");
 		Iterable<Pessoa> pessoaIt = pessoaRepository.findAll();
-		modelAndView.addObject("pessoas", pessoaIt);
 		modelAndView.addObject("pessoaobj", new Pessoa());
+		modelAndView.addObject("pessoas", pessoaIt);
+		modelAndView.addObject("msg", "Salvo com sucesso!!");
 
 		return modelAndView;
 	}
@@ -74,6 +97,7 @@ public class PessoaController {
 		ModelAndView modelAndView = new ModelAndView("cadastro/cadastropessoa");
 		modelAndView.addObject("pessoas", pessoaRepository.findAll());
 		modelAndView.addObject("pessoaobj", new Pessoa());
+		modelAndView.addObject("msg", "Excluído com sucesso!!");
 
 		return modelAndView;
 	}
@@ -103,14 +127,34 @@ public class PessoaController {
 	@PostMapping("**/addFonePessoa/{pessoaid}")
 	public ModelAndView addFonePessoa(Telefone telefone, @PathVariable("pessoaid") Long pessoaid) {
 
+		// Aqui será feita a validação de uma forma diferente que foi feita com Pessoa
+
 		Pessoa pessoa = pessoaRepository.findById(pessoaid).get();
+		ModelAndView modelAndView = new ModelAndView("cadastro/telefones");
+
+		if (telefone != null && telefone.getNumero().isEmpty() || telefone.getTipo().isEmpty()) {
+			modelAndView.addObject("pessoaobj", pessoa);
+			modelAndView.addObject("telefones", telefoneRepository.getTelefones(pessoaid));
+
+			List<String> msg = new ArrayList<String>();
+			if (telefone.getNumero().isEmpty()) {
+				msg.add("Número deve ser informado");
+			}
+
+			if (telefone.getTipo().isEmpty()) {
+				msg.add("Tipo deve ser informado");
+			}
+
+			modelAndView.addObject("msg", msg);
+			return modelAndView;
+		}
 
 		telefone.setPessoa(pessoa);
 		telefoneRepository.save(telefone);
-		ModelAndView modelAndView = new ModelAndView("cadastro/telefones");
 		modelAndView.addObject("pessoaobj", pessoa);
 		modelAndView.addObject("telefoneobj", new Telefone());
 		modelAndView.addObject("telefones", telefoneRepository.getTelefones(pessoaid));
+		modelAndView.addObject("msg", "Salvo com sucesso!");
 
 		return modelAndView;
 	}
@@ -124,6 +168,7 @@ public class PessoaController {
 		modelAndView.addObject("pessoaobj", pessoa);
 		modelAndView.addObject("telefoneobj", new Telefone());
 		modelAndView.addObject("telefones", telefoneRepository.getTelefones(pessoa.getId()));
+		modelAndView.addObject("msg", "Excluído com sucesso!!");
 
 		return modelAndView;
 	}
@@ -137,6 +182,7 @@ public class PessoaController {
 		ModelAndView modelAndView = new ModelAndView("cadastro/telefones");
 		modelAndView.addObject("pessoaobj", pessoa);
 		modelAndView.addObject("telefoneobj", telefone.get());
+		modelAndView.addObject("telefones", telefoneRepository.getTelefones(pessoa.getId()));
 
 		return modelAndView;
 	}

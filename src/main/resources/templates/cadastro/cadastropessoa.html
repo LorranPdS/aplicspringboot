@@ -27,6 +27,12 @@ input[type="submit"] {
 	<h5>Cadastro de Pessoas</h5>
 
 	<div class="row">
+
+		<br>
+		<div th:each="m : ${msg}" style="color: red; font-weight: bold;">
+			<span th:text="${m}"></span>
+		</div>
+		<br>
 		<form action="/salvarpessoa" method="post" th:object="${pessoaobj}"
 			class="col s12" id="formpessoa">
 
@@ -101,7 +107,8 @@ input[type="submit"] {
 			<td th:text="${pessoa.id}" />
 
 			<td><a th:href="@{/telefones/{idpessoa}(idpessoa=${pessoa.id})}">
-			<span th:text="${pessoa.nome}"></span></a></td>
+					<span th:text="${pessoa.nome}"></span>
+			</a></td>
 
 			<td th:text="${pessoa.sobrenome}" />
 			<td><a

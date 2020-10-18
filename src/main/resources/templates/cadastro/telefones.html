@@ -53,14 +53,21 @@ input[type="submit"] {
 
 	<h5>Telefones</h5>
 
+	<br>
+	<div th:each="m : ${msg}">
+		<span th:text="${m}" style="color: red; font-weight: bold;"></span>
+	</div>
+	<br>
+
 	<div class="row">
 		<form
 			th:action="@{/addFonePessoa/{pessoaid}(pessoaid=${pessoaobj.id})}"
-			method="post" class="col s12" th:object="${telefoneobj}">
+			method="post" class="col s12" th:object="${telefoneobj}"
+			onsubmit="return validarCampos()?true:false">
 			<div>
 				<div class="input-field col s4">
-					<label class="active" for="id">Id</label> <input
-						class="validate" th:field="*{id}" name="id" readonly="readonly" />
+					<label class="active" for="id">Id</label> <input class="validate"
+						th:field="*{id}" name="id" readonly="readonly" />
 				</div>
 
 			</div>
@@ -68,14 +75,16 @@ input[type="submit"] {
 			<div>
 				<div class="input-field col s4">
 					<label class="active" for="tipo">Tipo</label> <input
-						class="validate" th:field="*{tipo}" name="tipo" required="required" />
+						class="validate" th:field="*{tipo}" name="tipo"
+						id="tipo" />
 				</div>
 
 			</div>
 			<div class="row">
 				<div class="input-field col s4">
 					<label class="active" for="numero">Número</label> <input
-						class="validate" th:field="*{numero}" name="numero" required="required" />
+						class="validate" th:field="*{numero}" name="numero"
+						id="numero" />
 				</div>
 
 				<input value="Salvar" type="submit"
@@ -105,6 +114,24 @@ input[type="submit"] {
 				th:href="@{/removerTelefone/{idtelefone}(idtelefone=${fone.id})}">
 					Excluir</a></td>
 		</tr>
-	</table>	
+	</table>
+	
+	<script type="text/javascript">
+	function validarCampos(){
+		tipo = document.getElementById('tipo').value;
+		numero = document.getElementById('numero').value;
+		
+		if(tipo == ''){
+			alert('Tipo deve ser informado');
+			return false;
+		}
+		
+		if(numero == ''){
+			alert('Número deve ser informado');
+			return false;
+		}
+		return true;		
+	}
+	</script>
 </body>
 </html>
