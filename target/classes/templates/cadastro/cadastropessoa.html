@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
-	xmlns:th="http://www.thymeleaf.org">
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
 <meta charset="UTF-8">
 <link rel="stylesheet"
@@ -48,8 +49,10 @@ input[type="submit"] {
 						required="required" />
 				</div>
 			</div>
+
 			<div class="row">
-				<div class="input-field col s6">
+				<div class="input-field col s6"
+					sec:authorize="hasRole('ROLE_ADMIN')">
 					<label for="sobrenome" class="active">Sobrenome:</label> <input
 						name="sobrenome" th:field="*{sobrenome}" class="validate" />
 				</div>
