@@ -45,6 +45,8 @@ public class PessoaController {
 	@RequestMapping(method = RequestMethod.POST, value = "**/salvarpessoa")
 	public ModelAndView salvar(@Valid Pessoa pessoa, BindingResult bindingResult) {
 		ModelAndView modelAndView = new ModelAndView("cadastro/cadastropessoa");
+		
+		pessoa.setTelefones(telefoneRepository.getTelefones(pessoa.getId()));
 
 		if (bindingResult.hasErrors()) {
 			Iterable<Pessoa> pessoaIt = pessoaRepository.findAll();
@@ -102,11 +104,22 @@ public class PessoaController {
 		return modelAndView;
 	}
 
+	@SuppressWarnings("unlikely-arg-type")
 	@PostMapping("**/pesquisarpessoa")
-	public ModelAndView pesquisar(@RequestParam("nomepesquisa") String nomepesquisa) {
+	public ModelAndView pesquisar(@RequestParam("nomepesquisa") String nomepesquisa,
+			@RequestParam("pesquisaSexo") Character pesquisaSexo) {
+		
+		List<Pessoa> pessoas = new ArrayList<Pessoa>();
+		
+		if(pesquisaSexo != null && !pesquisaSexo.equals(true)) {
+			pessoas = pessoaRepository.findPessoaByNameSexo(nomepesquisa, pesquisaSexo);
+		}
+		else {
+			pessoas = pessoaRepository.findPessoaByName(nomepesquisa);
+		}
 
 		ModelAndView modelAndView = new ModelAndView("cadastro/cadastropessoa");
-		modelAndView.addObject("pessoas", pessoaRepository.findPessoaByName(nomepesquisa));
+		modelAndView.addObject("pessoas", pessoas);
 		modelAndView.addObject("pessoaobj", new Pessoa());
 
 		return modelAndView;

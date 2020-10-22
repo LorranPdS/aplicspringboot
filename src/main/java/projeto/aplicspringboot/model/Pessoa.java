@@ -34,6 +34,14 @@ public class Pessoa implements Serializable {
 	@NotNull(message = "Preencha o campo 'idade'")
 	private Integer idade;
 
+	private Character sexopessoa;
+
+	private String cep;
+	private String rua;
+	private String bairro;
+	private String cidade;
+	private String uf;
+
 	@OneToMany(mappedBy = "pessoa", orphanRemoval = true, cascade = CascadeType.ALL)
 	private List<Telefone> telefones;
 
@@ -67,6 +75,62 @@ public class Pessoa implements Serializable {
 
 	public void setIdade(Integer idade) {
 		this.idade = idade;
+	}
+
+	public Character getSexopessoa() {
+		return sexopessoa;
+	}
+
+	public void setSexopessoa(Character sexopessoa) {
+		this.sexopessoa = sexopessoa;
+	}
+
+	public String getCep() {
+		return cep;
+	}
+
+	public void setCep(String cep) {
+		this.cep = cep;
+	}
+
+	public String getRua() {
+		return rua;
+	}
+
+	public void setRua(String rua) {
+		this.rua = rua;
+	}
+
+	public String getBairro() {
+		return bairro;
+	}
+
+	public void setBairro(String bairro) {
+		this.bairro = bairro;
+	}
+
+	public String getCidade() {
+		return cidade;
+	}
+
+	public void setCidade(String cidade) {
+		this.cidade = cidade;
+	}
+
+	public String getUf() {
+		return uf;
+	}
+
+	public void setUf(String uf) {
+		this.uf = uf;
+	}
+
+	public List<Telefone> getTelefones() {
+		return telefones;
+	}
+
+	public void setTelefones(List<Telefone> telefones) {
+		this.telefones = telefones;
 	}
 
 	@Override

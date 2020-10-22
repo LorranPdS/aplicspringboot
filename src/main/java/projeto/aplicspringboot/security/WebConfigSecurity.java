@@ -27,6 +27,21 @@ public class WebConfigSecurity extends WebSecurityConfigurerAdapter {
 		.failureUrl("/login?error=true")
 		.and().logout().logoutSuccessUrl("/login")
 		.logoutRequestMatcher(new AntPathRequestMatcher("/logout"));
+		
+		/*Se fosse para restrição de acessos (somente quem for role ADMIN poderia
+		 acessar /cadastropessoa), o código seria desta maneira:
+		 
+		  http.csrf().disable().authorizeRequests().antMatchers(HttpMethod.GET, "/")
+		.permitAll()
+		.antMatchers(HttpMethod.GET, "/cadastropessoa").hasAnyRole("ADMIN")
+		.anyRequest()
+		.authenticated().and().formLogin().permitAll()
+		.loginPage("/login").defaultSuccessUrl("/cadastropessoa")
+		.failureUrl("/login?error=true")
+		.and().logout().logoutSuccessUrl("/login")
+		.logoutRequestMatcher(new AntPathRequestMatcher("/logout"));
+		  
+		 */
 	}
 
 	@Override
