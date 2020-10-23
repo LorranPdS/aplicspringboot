@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +33,9 @@ public class PessoaController {
 
 	@Autowired
 	private TelefoneRepository telefoneRepository;
+	
+	@Autowired
+	private ReportUtil<Pessoa> reportUtil;
 
 	@RequestMapping(method = RequestMethod.GET, value = "/cadastropessoa")
 	public ModelAndView inicio() {
@@ -123,6 +128,51 @@ public class PessoaController {
 		modelAndView.addObject("pessoaobj", new Pessoa());
 
 		return modelAndView;
+	}
+	
+	@SuppressWarnings("unlikely-arg-type")
+	@GetMapping("**/pesquisarpessoa")
+	public void impressaoPdf(@RequestParam("nomepesquisa") String nomepesquisa, 
+			@RequestParam("pesquisaSexo") Character pesquisaSexo,
+			HttpServletRequest request, HttpServletResponse response) throws Exception {
+		
+		List<Pessoa> pessoas = new ArrayList<Pessoa>();
+		
+		// Buscando por nome e sexo
+		if(pesquisaSexo != null && !pesquisaSexo.equals(true)
+				&& nomepesquisa != null && !nomepesquisa.isEmpty()) {
+			pessoas = pessoaRepository.findPessoaByNameSexo(nomepesquisa, pesquisaSexo);
+		}
+		
+		// Buscando somente por nome
+		else if(nomepesquisa != null && !nomepesquisa.isEmpty()) {
+			pessoas = pessoaRepository.findPessoaByName(nomepesquisa);
+		}
+		
+		// Buscando somente por sexo
+		else if(pesquisaSexo != null && !pesquisaSexo.equals(true)) {
+			pessoas = pessoaRepository.findPessoaBySexo(pesquisaSexo);
+		}
+		
+		// Buscando por todos
+		else {
+			Iterable<Pessoa> iterator = pessoaRepository.findAll();
+			for(Pessoa p : iterator) {
+				pessoas.add(p);
+			}
+		}
+		
+		byte[] pdf = reportUtil.gerarRelatorio(pessoas, "pessoa", 
+				request.getServletContext());
+		
+		response.setContentLength(pdf.length);
+		response.setContentType("application/octet-stream");
+		
+		String headerKey = "Content-Disposition";
+		String headerValue = String.format(
+				"attachment; filename=\"%s\"", "relatorio.pdf");
+		response.setHeader(headerKey, headerValue);
+		response.getOutputStream().write(pdf);
 	}
 
 	@GetMapping("/telefones/{idpessoa}")
